@@ -6,6 +6,7 @@ at searching for a particular piece of data in the tree.
 This part of the project comprises two days:
 1. Implement the methods `insert`, `contains`, `get_max`, and `for_each`
    on the BSTNode class.
+
 2. Implement the `in_order_print`, `bft_print`, and `dft_print` methods
    on the BSTNode class.
 """
@@ -17,22 +18,70 @@ class BSTNode:
 
     # Insert the given value into the tree
     def insert(self, value):
-        pass
+        # 1. Check if there is no root,
+        if self is None:
+            # If there isn't, create the node and park it there
+            self = BSTNode(value)
+        # 2. Otherwise, there is a root
+        else:
+            # Compare the value to the root's value to determine which direction we're gonna go in
+            # If the value < root's value
+            if value < self.value:
+                # Go left
+                # How do we go left?
+                if self.left:
+                    # Then self.left is a Node
+                    self.left.insert(value)
+                else:
+                    # Then we can park the value here
+                    self.left = BSTNode(value)
+            # else the value >= root's value
+            else:
+                # Go right
+                # How do we go right?
+                if self.right:
+                    # Then self.right is a Node
+                    self.right.insert(value)
+                else:
+                    # Then we can park the value here
+                    self.right = BSTNode(value)
 
     # Return True if the tree contains the value
     # False if it does not
     def contains(self, target):
-        pass
+        while self != None:
+            if target < self.value:
+                self = self.left
+            elif target > self.value:
+                self = self.right
+            else:
+                return True
+        return False
 
     # Return the maximum value found in the tree
     def get_max(self):
-        pass
+        rCurrent = self
+        lCurrent = self
+        while(lCurrent.left):
+            lCurrent = lCurrent.left
+        while(rCurrent.right):
+            rCurrent = rCurrent.right
+        if rCurrent.value > lCurrent.value:
+            return rCurrent.value
+        else:
+            return lCurrent.value
 
     # Call the function `fn` on the value of each node
     def for_each(self, fn):
-        pass
+        fn(self.value)
+        if self.left:
+            self.left.for_each(fn)
+        if self.right:
+            self.right.for_each(fn)
+
 
     # Part 2 -----------------------
+
 
     # Print all the values in order from low to high
     # Hint:  Use a recursive, depth first traversal
